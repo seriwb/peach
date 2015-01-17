@@ -39,12 +39,14 @@ class Main {
 		log.info("start peach")
 
 		// 設定情報を取得
-		def config = new ConfigSlurper().parse(new File('./conf/Config.groovy').toURI().toURL())
+		ConfigObject config = new ConfigSlurper().parse(
+			new File('./conf/Config.groovy').toURI().toURL())
 
 		String targetTweet = config.peach.target.tweet
 		String replyMessage = config.peach.reply.message
-		if (targetTweet == null || targetTweet == "" ||
-			replyMessage == null || replyMessage == "") {
+
+		if (!config.containsKey("peach.target.tweet") || targetTweet == "" ||
+			!config.containsKey("peach.reply.message") || replyMessage == "") {
 			log.error("must be setting Config")
 			System.exit(-1)
 		}
