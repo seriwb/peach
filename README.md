@@ -1,6 +1,7 @@
 # peach
 
-Twitter上の特定の発言に反応し、あらかじめ指定された文言をリプライで返すTwitter botプログラムです。
+Twitter上の特定の発言に反応し、あらかじめ指定された文言をリプライで返すTwitter botプログラムです。  
+発言がリプライとリツイートのものは、本アプリケーションのリプライ対象外になります。
 
 デフォルト設定では「痩せよう」というキーワードに反応し、
 発言者に対して「そのままがいいよ」というリプライを返します。
@@ -16,8 +17,9 @@ Twitter上の特定の発言に反応し、あらかじめ指定された文言�
 
 1. [Java SE](http://www.oracle.com/technetwork/java/javase/downloads/index.html)をインストール。
 2. [releases](https://github.com/seriwb/peach/releases)からzipファイルを取得し、適当な場所に展開。
-3. 必要に応じてconf/Config.groovyの値を調整。
-4. コンソールからpeach.jarがある場所まで移動し、以下のコマンドを実行。
+3. twitter4j.propertiesで「oauth.consumerKey」「oauth.consumerSecret」「oauth.accessToken」「oauth.accessTokenSecret」の値を設定。
+4. botが反応するキーワードとリプライ内容を変更する場合は、conf/Config.groovyを編集。
+5. コンソールからpeach.jarがある場所まで移動し、以下のコマンドを実行。
 ```
 java -jar peach.jar
 ```
@@ -34,6 +36,13 @@ java -jar peach.jar
 
 # プログラムガイド
 
+## プログラムの実行
+
+以下のクラスに含まれるmainメソッドを実行してください。
+
+    /peach/src/main/groovy/white/box/peach/Main.groovy
+
+
 ## ビルド
 
 #### ビルド環境
@@ -47,13 +56,6 @@ java -jar peach.jar
 Gradleのbuildタスクを実施してください。
 
     gradle build
-
-
-## プログラムの実行
-
-以下のクラスに含まれるmainメソッドを実行してください。
-
-    /peach/src/main/groovy/white/box/peach/Main.groovy
 
 
 

@@ -11,6 +11,8 @@ repositories {
 dependencies {
 	compile ('org.codehaus.groovy:groovy-all:2.3.3') {transitive = false}
 	compile ('org.twitter4j:twitter4j-core:[4.0,)') {transitive = false}
+	compile ('org.twitter4j:twitter4j-async:[4.0,)') {transitive = false}
+	compile ('org.twitter4j:twitter4j-stream:[4.0,)') {transitive = false}
 	compile ('org.apache.logging.log4j:log4j-core:2.0.1') {transitive = false}
 	compile ('org.apache.logging.log4j:log4j-api:2.0.1') {transitive = false}
 	compile ('org.apache.logging.log4j:log4j-slf4j-impl:2.0.1') {transitive = false}
