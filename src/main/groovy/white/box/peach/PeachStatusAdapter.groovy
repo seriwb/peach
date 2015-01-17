@@ -22,6 +22,14 @@ import twitter4j.TwitterFactory
 @Slf4j
 class PeachStatusAdapter extends StatusAdapter {
 
+	private final String replyMessage;
+
+	private PeachStatusAdapter() {}
+
+	public PeachStatusAdapter(String replyMessage) {
+		this.replyMessage = replyMessage
+	}
+
 	@Override
 	public void onStatus(Status status) {
 
@@ -34,9 +42,7 @@ class PeachStatusAdapter extends StatusAdapter {
 
 		Twitter twitter = TwitterFactory.getSingleton();
 
-		String message = "@${status.getUser().getScreenName()} そのままがいいよ"
-
-		StatusUpdate tweetstatus = new StatusUpdate(message)
+		StatusUpdate tweetstatus = new StatusUpdate(replyMessage)
 		tweetstatus.setInReplyToStatusId(status.getId())
 
 		// リプライ実行
@@ -48,7 +54,7 @@ class PeachStatusAdapter extends StatusAdapter {
 			// つぶやきが失敗するので、その場合だけ日時を付けてつぶやく
 			Date date = new Date()
 			def dateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
-			tweetstatus = new StatusUpdate(message + "\n" + dateFormat.format(date))
+			tweetstatus = new StatusUpdate(replyMessage + "\n" + dateFormat.format(date))
 			tweetstatus.setInReplyToStatusId(status.getId())
 			twitter.updateStatus(tweetstatus)
 		}

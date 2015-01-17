@@ -38,14 +38,24 @@ class Main {
 
 		log.info("start peach")
 
+		// 設定情報を取得
+		def config = new ConfigSlurper().parse(new File('./conf/Config.groovy').toURI().toURL())
+
+		String targetTweet = config.peach.target.tweet
+		String replyMessage = config.peach.reply.message
+		if (targetTweet == null || targetTweet == "" ||
+			replyMessage == null || replyMessage == "") {
+			log.error("must be setting Config")
+			System.exit(-1)
+		}
+
 		// Stream情報を取得できるTwitterインスタンスを取得
 		TwitterStream twitterStream = new TwitterStreamFactory().getInstance()
-		twitterStream.addListener(new PeachStatusAdapter())
+		twitterStream.addListener(new PeachStatusAdapter(replyMessage))
 
-
+		// botが反応するキーワードを設定
 		ArrayList<String> track = new ArrayList<>()
-		track.addAll(Arrays.asList("痩せよう", "やせよう", "痩せたい", "やせたい", ))
-
+		track.addAll(Arrays.asList(targetTweet))
 		String[] trackArray = track.toArray(new String[track.size()])
 
 		twitterStream.filter(new FilterQuery(0, null, trackArray))
