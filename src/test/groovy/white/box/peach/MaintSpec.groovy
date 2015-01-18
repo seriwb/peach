@@ -1,5 +1,6 @@
 package white.box.peach;
 
+import spock.lang.Ignore
 import spock.lang.Specification;
 
 /**
@@ -15,6 +16,7 @@ class MaintSpec extends Specification {
 	/**
 	 * ログ出力とmainの呼び出しを確認する。
 	 */
+	@Ignore
 	def 起動テスト() {
 
 		setup:

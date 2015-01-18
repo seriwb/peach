@@ -40,16 +40,20 @@ class Main {
 
 		// 設定情報を取得
 		ConfigObject config = new ConfigSlurper().parse(
-			new File('./conf/Config.groovy').toURI().toURL())
+			new File('./conf/Config.groovy').getText("UTF-8"))
 
-		String targetTweet = config.peach.target.tweet
-		String replyMessage = config.peach.reply.message
+		Properties props = config.toProperties()
+		String targetTweet = props.getProperty("peach.target.tweet")
+		String replyMessage = props.getProperty("peach.reply.message")
 
-		if (!config.containsKey("peach.target.tweet") || targetTweet == "" ||
-			!config.containsKey("peach.reply.message") || replyMessage == "") {
+		if (targetTweet == null || targetTweet == "" ||
+			replyMessage == null || replyMessage == "") {
 			log.error("must be setting Config")
 			System.exit(-1)
 		}
+
+		log.info("traget tweet: $targetTweet")
+		log.info("reply message: $replyMessage")
 
 		// Stream情報を取得できるTwitterインスタンスを取得
 		TwitterStream twitterStream = new TwitterStreamFactory().getInstance()

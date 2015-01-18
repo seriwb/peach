@@ -42,7 +42,8 @@ class PeachStatusAdapter extends StatusAdapter {
 
 		Twitter twitter = TwitterFactory.getSingleton();
 
-		StatusUpdate tweetstatus = new StatusUpdate(replyMessage)
+		String message = "@${status.getUser().getScreenName()} $replyMessage"
+		StatusUpdate tweetstatus = new StatusUpdate(message)
 		tweetstatus.setInReplyToStatusId(status.getId())
 
 		// リプライ実行
@@ -54,7 +55,7 @@ class PeachStatusAdapter extends StatusAdapter {
 			// つぶやきが失敗するので、その場合だけ日時を付けてつぶやく
 			Date date = new Date()
 			def dateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
-			tweetstatus = new StatusUpdate(replyMessage + "\n" + dateFormat.format(date))
+			tweetstatus = new StatusUpdate("$message\n${dateFormat.format(date)}")
 			tweetstatus.setInReplyToStatusId(status.getId())
 			twitter.updateStatus(tweetstatus)
 		}
