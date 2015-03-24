@@ -25,6 +25,8 @@ import twitter4j.auth.AccessToken
 @Slf4j
 class Main {
 
+	public static Boolean restart = Boolean.TRUE
+
 	/**
 	 * 実行クラス。
 	 * <ul>
@@ -38,39 +40,32 @@ class Main {
 
 		log.info("start peach")
 
-		// 設定情報を取得
-		ConfigObject config = new ConfigSlurper().parse(
-			new File('./conf/Config.groovy').getText("UTF-8"))
-
-		Properties props = config.toProperties()
-		String targetTweet = props.getProperty("peach.target.tweet")
-		String replyMessage = props.getProperty("peach.reply.message")
-
-		if (targetTweet == null || targetTweet == "" ||
-			replyMessage == null || replyMessage == "") {
-			log.error("must be setting Config")
-			System.exit(-1)
-		}
-
-		log.info("traget tweet: $targetTweet")
-		log.info("reply message: $replyMessage")
-
-		// Stream情報を取得できるTwitterインスタンスを取得
-		TwitterStream twitterStream = new TwitterStreamFactory().getInstance()
-		twitterStream.addListener(new PeachStatusAdapter(replyMessage))
-
-		// botが反応するキーワードを設定
-		ArrayList<String> track = new ArrayList<>()
-		track.addAll(Arrays.asList(targetTweet))
-		String[] trackArray = track.toArray(new String[track.size()])
-
-		twitterStream.filter(new FilterQuery(0, null, trackArray))
-
 		// Ctrl+Cによる終了処理
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run () {
 				log.info("exit.")
+			}});
+
+		Watcher watcher = new Watcher()
+
+		while (true) {
+
+			if (restart) {
+
+				restart = Boolean.FALSE
+
+				try {
+					watcher.start()
+				} catch (e) {
+					log.error("Thread Error!", e)
+
+					restart = Boolean.TRUE
+
+					watcher = new Watcher()
+				}
 			}
-		});
+
+			Thread.sleep(15 * 60 * 1000)
+		}
 	}
 }
