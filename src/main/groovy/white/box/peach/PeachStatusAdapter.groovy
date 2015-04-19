@@ -66,5 +66,6 @@ class PeachStatusAdapter extends StatusAdapter {
 	@Override
 	public void onException(Exception ex) {
 		log.error(ex)
+		Main.restart = Boolean.TRUE
 	}
 }

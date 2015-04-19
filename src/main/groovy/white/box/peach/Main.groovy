@@ -26,6 +26,8 @@ import twitter4j.auth.AccessToken
 class Main {
 
 	public static Boolean restart = Boolean.TRUE
+	
+	public static Boolean started = Boolean.FALSE
 
 	/**
 	 * 実行クラス。
@@ -46,22 +48,18 @@ class Main {
 				log.info("exit.")
 			}});
 
-		Watcher watcher = new Watcher()
-
 		while (true) {
 
 			if (restart) {
-
 				restart = Boolean.FALSE
 
+				Watcher watcher = new Watcher()
 				try {
-					watcher.start()
+					watcher.run()
 				} catch (e) {
 					log.error("Thread Error!", e)
-
 					restart = Boolean.TRUE
-
-					watcher = new Watcher()
+					started = Boolean.FALSE
 				}
 			}
 
